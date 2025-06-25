@@ -1427,7 +1427,7 @@ describeHttp2('http2', function() {
             .end(function (err, res) {
               res.status.should.equal(200);
               res.text.should.equal('hey');
-              // close the external server explictly
+              // close the external server explicitly
               server.close(done);
             });
         });
