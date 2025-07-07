@@ -1444,8 +1444,8 @@ describeHttp2('http2', function() {
             .end(function (err, res) {
               res.status.should.equal(200);
               res.text.should.equal('hey');
-              // Let supertest handle server closing
-              done();
+              // lose the external server explicitly
+              server.close(done);
             });
         });
       });
