@@ -246,7 +246,7 @@ describe('request(app)', function () {
         }
       });
 
-      test.get('/').bearer('test-token').expect(200).expect('Authoried');
+      test.get('/').bearer('test-token').expect(200).expect('Authorized');
     });
   });
 
@@ -1444,8 +1444,8 @@ describeHttp2('http2', function() {
             .end(function (err, res) {
               res.status.should.equal(200);
               res.text.should.equal('hey');
-              // close the external server explicitly
-              server.close(done);
+              // Let supertest handle server closing
+              done();
             });
         });
       });
