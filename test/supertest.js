@@ -37,7 +37,7 @@ describe('request(url)', function () {
       const url = 'http://127.0.0.1:' + server.address().port;
       request(url)
         .get('/')
-        .expect('hello123', done);
+        .expect('hello', done);
     });
   });
 
