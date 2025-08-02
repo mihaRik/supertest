@@ -26,9 +26,17 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Send Telegram alert on failure
-        if: failure()
+      - name: Send Telegram error log on failure
+        if: steps.run_tests.outputs.exit_code != '0'
         run: |
-          curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-          -d text="🚨 CI failed in *${{ github.repository }}* on branch *${{ github.ref_name }}*\nCommit: ${{ github.sha }} by ${{ github.actor }}"
+          MESSAGE="🚨 *CI failed in ${{ github.repository }}*
+          👤 ${{ github.actor }}
+          📦 Job: ${{ github.job }}
+          🔍 [View Logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+
+              LOG=$(head -n 30 test-output.log | sed 's/"/\\"/g' | sed "s/'/\\'/g")
+
+              curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage \
+                -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+                -d text="$MESSAGE%0A\`\`\`${LOG}\`\`\`" \
+                -d parse_mode=Markdown
