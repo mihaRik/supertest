@@ -26,8 +26,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Send Telegram error log on failure
-        if: steps.run_tests.outputs.exit_code != '0'
+      - name: Send Telegram alert on failure
+        if: failure()
         run: |
           MESSAGE="🚨 *CI failed in ${{ github.repository }}*
           👤 ${{ github.actor }}
